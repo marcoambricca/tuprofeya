@@ -57,6 +57,7 @@ router.get('/me', authenticate, async (req, res) => {
     const sub = await subscriptionService.getMySubscription(req.user.id);
     res.json(sub);
   } catch (err) {
+    console.error('[GET /subscriptions/me]', err);
     res.status(500).json({ message: 'Error interno' });
   }
 });
@@ -83,6 +84,7 @@ router.post('/subscribe', authenticate, requireVerified, async (req, res) => {
     const sub = await subscriptionRepo.create(req.user.id, plan);
     res.json(sub);
   } catch (err) {
+    console.error('[POST /subscriptions/subscribe]', err);
     res.status(500).json({ message: 'Error interno' });
   }
 });

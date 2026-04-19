@@ -21,7 +21,7 @@ router.post('/', authenticate, requireVerified, async (req, res) => {
     const review = await reviewRepo.create(req.user.id, teacherId, chatId, rating, comment);
     res.status(201).json(review);
   } catch (err) {
-    console.error(err);
+    console.error('[POST /reviews]', err);
     res.status(500).json({ message: 'Error interno' });
   }
 });
@@ -35,6 +35,7 @@ router.get('/teacher/:userId', async (req, res) => {
     ]);
     res.json({ reviews, stats });
   } catch (err) {
+    console.error('[GET /reviews/teacher/:userId]', err);
     res.status(500).json({ message: 'Error interno' });
   }
 });
@@ -45,6 +46,7 @@ router.get('/landing', async (req, res) => {
     const reviews = await reviewRepo.getLatestForLanding(6);
     res.json(reviews);
   } catch (err) {
+    console.error('[GET /reviews/landing]', err);
     res.status(500).json({ message: 'Error interno' });
   }
 });

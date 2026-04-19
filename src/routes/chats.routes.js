@@ -8,6 +8,7 @@ router.get('/', authenticate, async (req, res) => {
     const chats = await chatRepo.findByUser(req.user.id);
     res.json(chats);
   } catch (err) {
+    console.error('[GET /chats]', err);
     res.status(500).json({ message: 'Error interno' });
   }
 });
@@ -26,6 +27,7 @@ router.get('/:id', authenticate, async (req, res) => {
     await chatRepo.markMessagesRead(req.params.id, req.user.id);
     res.json({ chat, messages });
   } catch (err) {
+    console.error('[GET /chats/:id]', err);
     res.status(500).json({ message: 'Error interno' });
   }
 });
@@ -43,6 +45,7 @@ router.get('/:id/messages', authenticate, async (req, res) => {
     );
     res.json(messages);
   } catch (err) {
+    console.error('[GET /chats/:id/messages]', err);
     res.status(500).json({ message: 'Error interno' });
   }
 });

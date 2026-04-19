@@ -21,6 +21,7 @@ router.post('/register', [
     const result = await authService.register(req.body);
     res.status(201).json(result);
   } catch (err) {
+    console.error('[POST /auth/register]', err);
     res.status(err.status || 500).json({ message: err.message || 'Error interno' });
   }
 });
@@ -35,6 +36,7 @@ router.post('/login', [
     const result = await authService.login(req.body);
     res.json(result);
   } catch (err) {
+    console.error('[POST /auth/login]', err);
     res.status(err.status || 500).json({ message: err.message || 'Error interno' });
   }
 });
@@ -45,7 +47,8 @@ router.post('/verify', authenticate, async (req, res) => {
     await authService.verifyEmail(req.user.id, req.body.code);
     res.json({ message: 'Email verificado correctamente' });
   } catch (err) {
-    res.status(err.status || 500).json({ message: err.message });
+    console.error('[POST /auth/verify]', err);
+    res.status(err.status || 500).json({ message: err.message || 'Error interno' });
   }
 });
 
@@ -55,7 +58,8 @@ router.post('/resend-verification', authenticate, async (req, res) => {
     await authService.resendVerification(req.user.id);
     res.json({ message: 'Código reenviado' });
   } catch (err) {
-    res.status(err.status || 500).json({ message: err.message });
+    console.error('[POST /auth/resend-verification]', err);
+    res.status(err.status || 500).json({ message: err.message || 'Error interno' });
   }
 });
 

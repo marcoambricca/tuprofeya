@@ -19,7 +19,7 @@ router.get('/search', async (req, res) => {
     });
     res.json(results);
   } catch (err) {
-    console.error(err);
+    console.error('[GET /announcements/search]', err);
     res.status(500).json({ message: 'Error interno' });
   }
 });
@@ -32,6 +32,7 @@ router.get('/:id', async (req, res) => {
     await announcementRepo.incrementViews(req.params.id);
     res.json(announcement);
   } catch (err) {
+    console.error('[GET /announcements/:id]', err);
     res.status(500).json({ message: 'Error interno' });
   }
 });
@@ -48,7 +49,7 @@ router.post('/', authenticate, requireVerified, requireRole('teacher'), async (r
     const announcement = await announcementRepo.create(profile.id, req.body);
     res.status(201).json(announcement);
   } catch (err) {
-    console.error(err);
+    console.error('[POST /announcements]', err);
     res.status(500).json({ message: 'Error interno' });
   }
 });
@@ -63,6 +64,7 @@ router.put('/:id', authenticate, requireRole('teacher'), async (req, res) => {
     if (!updated) return res.status(404).json({ message: 'Anuncio no encontrado' });
     res.json(updated);
   } catch (err) {
+    console.error('[PUT /announcements/:id]', err);
     res.status(500).json({ message: 'Error interno' });
   }
 });
@@ -76,6 +78,7 @@ router.delete('/:id', authenticate, requireRole('teacher'), async (req, res) => 
     await announcementRepo.remove(req.params.id, profile.id);
     res.json({ message: 'Anuncio eliminado' });
   } catch (err) {
+    console.error('[DELETE /announcements/:id]', err);
     res.status(500).json({ message: 'Error interno' });
   }
 });

@@ -25,7 +25,9 @@ const register = async ({ name, email, password, role, teacherData }) => {
   const code = generateCode();
   const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
   await userRepo.createVerificationCode(user.id, code, expiresAt);
-  await emailService.sendVerificationEmail(email, name, code);
+  emailService.sendVerificationEmail(email, name, code).catch(err =>
+    console.error('[auth.service] Error enviando email de verificacion:', err)
+  );
 
   const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
   return { user, token };

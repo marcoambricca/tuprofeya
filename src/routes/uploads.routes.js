@@ -14,7 +14,7 @@ router.post('/avatar', authenticate, upload.single('file'), async (req, res) => 
     await userRepo.updateAvatar(req.user.id, url);
     res.json({ url });
   } catch (err) {
-    console.error(err);
+    console.error('[POST /uploads/avatar]', err);
     res.status(500).json({ message: 'Error al subir imagen' });
   }
 });
@@ -35,7 +35,7 @@ router.post('/certificate', authenticate, upload.single('file'), async (req, res
     const cert = await teacherRepo.addCertificate(profile.id, name, url);
     res.status(201).json(cert);
   } catch (err) {
-    console.error(err);
+    console.error('[POST /uploads/certificate]', err);
     res.status(500).json({ message: 'Error al subir certificado' });
   }
 });
@@ -51,6 +51,7 @@ router.delete('/certificate/:id', authenticate, async (req, res) => {
     await teacherRepo.deleteCertificate(req.params.id, profile.id);
     res.json({ message: 'Certificado eliminado' });
   } catch (err) {
+    console.error('[DELETE /uploads/certificate/:id]', err);
     res.status(500).json({ message: 'Error interno' });
   }
 });

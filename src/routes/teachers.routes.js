@@ -30,7 +30,7 @@ router.get('/featured', async (req, res) => {
     `);
     res.json(result.rows);
   } catch (err) {
-    console.error(err);
+    console.error('[GET /teachers/featured]', err);
     res.status(500).json({ message: 'Error interno' });
   }
 });
@@ -50,7 +50,7 @@ router.get('/:id', async (req, res) => {
 
     res.json({ profile, announcements, reviews, stats, certificates: certs });
   } catch (err) {
-    console.error(err);
+    console.error('[GET /teachers/:id]', err);
     res.status(500).json({ message: 'Error interno' });
   }
 });
@@ -69,6 +69,7 @@ router.get('/me/profile', authenticate, requireRole('teacher'), async (req, res)
 
     res.json({ profile, announcements, certificates: certs, subscription: sub });
   } catch (err) {
+    console.error('[GET /teachers/me/profile]', err);
     res.status(500).json({ message: 'Error interno' });
   }
 });
@@ -79,6 +80,7 @@ router.put('/me/profile', authenticate, requireRole('teacher'), async (req, res)
     const updated = await teacherRepo.update(req.user.id, req.body);
     res.json(updated);
   } catch (err) {
+    console.error('[PUT /teachers/me/profile]', err);
     res.status(500).json({ message: 'Error interno' });
   }
 });

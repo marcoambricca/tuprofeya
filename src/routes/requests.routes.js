@@ -39,12 +39,14 @@ router.post('/', authenticate, requireVerified, async (req, res) => {
     // Notify teacher
     const teacher = await userRepo.findById(teacherUserId);
     if (teacher) {
-      emailService.sendRequestNotification(teacher.email, teacher.name, req.user.name, announcement.subject).catch(() => {});
+      emailService.sendRequestNotification(teacher.email, teacher.name, req.user.name, announcement.subject).catch(err =>
+        console.error('[POST /requests] Error enviando notificacion al profesor:', err)
+      );
     }
 
     res.status(201).json(request);
   } catch (err) {
-    console.error(err);
+    console.error('[POST /requests]', err);
     res.status(500).json({ message: 'Error interno' });
   }
 });
@@ -60,6 +62,7 @@ router.get('/', authenticate, async (req, res) => {
     }
     res.json(requests);
   } catch (err) {
+    console.error('[GET /requests]', err);
     res.status(500).json({ message: 'Error interno' });
   }
 });
@@ -84,12 +87,14 @@ router.put('/:id/accept', authenticate, async (req, res) => {
     // Notify student
     const student = await userRepo.findById(request.student_id);
     if (student) {
-      emailService.sendRequestAccepted(student.email, student.name, req.user.name).catch(() => {});
+      emailService.sendRequestAccepted(student.email, student.name, req.user.name).catch(err =>
+        console.error('[PUT /requests/:id/accept] Error enviando notificacion al alumno:', err)
+      );
     }
 
     res.json({ request: { ...request, status: 'accepted' }, chat });
   } catch (err) {
-    console.error(err);
+    console.error('[PUT /requests/:id/accept]', err);
     res.status(500).json({ message: 'Error interno' });
   }
 });
@@ -107,6 +112,7 @@ router.put('/:id/reject', authenticate, async (req, res) => {
     await requestRepo.updateStatus(req.params.id, 'rejected');
     res.json({ message: 'Solicitud rechazada' });
   } catch (err) {
+    console.error('[PUT /requests/:id/reject]', err);
     res.status(500).json({ message: 'Error interno' });
   }
 });
