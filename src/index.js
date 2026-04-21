@@ -16,7 +16,10 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: process.env.CLIENT_URL || 'http://localhost:3000',
+    origin: [
+      'http://localhost:3000',
+      'https://tuprofeya-front.vercel.app'
+    ],
     credentials: true,
   },
 });
@@ -24,9 +27,13 @@ const io = new Server(server, {
 // Middleware
 app.use(helmet());
 app.use(cors({
-  origin: 'https://tuprofeya-front.vercel.app/', 
+  origin: [
+    'http://localhost:3000',
+    'https://tuprofeya-front.vercel.app'  // sin / al final
+  ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true  // necesario porque usás withCredentials: true en el front
 }));
 app.use(morgan('dev'));
 app.use(express.json());
