@@ -44,11 +44,17 @@ const canTeacherPublish = async (userId, teacherProfileId) => {
   return { allowed: true, remaining: config.maxAnnouncements - active };
 };
 
-const getMySubscription = async (userId) => {
+const getMySubscription = async (userId, role) => {
   const sub = await subscriptionRepo.findActive(userId);
   if (!sub) return null;
   const config = subscriptionRepo.getPlanConfig(sub.plan);
-  return { ...sub, config };
+
+  let contactsUsed = parseInt(sub.contacts_used) || 0;
+  if (role === 'teacher' && config.maxContacts !== Infinity) {
+    contactsUsed = await requestRepo.countAcceptedByTeacherInPeriod(userId, sub.period_start);
+  }
+
+  return { ...sub, config, contacts_used: contactsUsed };
 };
 
 module.exports = { canStudentContact, canTeacherAccept, canTeacherPublish, getMySubscription };

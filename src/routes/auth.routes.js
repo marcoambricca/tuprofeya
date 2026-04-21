@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const { body, validationResult } = require('express-validator');
 const authService = require('../services/auth.service');
+const userRepo = require('../repositories/user.repository');
 const { authenticate } = require('../middleware/auth.middleware');
 
 const validate = (req, res, next) => {
@@ -66,6 +67,17 @@ router.post('/resend-verification', authenticate, async (req, res) => {
 // GET /auth/me
 router.get('/me', authenticate, (req, res) => {
   res.json({ user: req.user });
+});
+
+// DELETE /auth/me — delete own account
+router.delete('/me', authenticate, async (req, res) => {
+  try {
+    await userRepo.deleteById(req.user.id);
+    res.json({ message: 'Cuenta eliminada correctamente' });
+  } catch (err) {
+    console.error('[DELETE /auth/me]', err);
+    res.status(500).json({ message: 'Error interno' });
+  }
 });
 
 module.exports = router;

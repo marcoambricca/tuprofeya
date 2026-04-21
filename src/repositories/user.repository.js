@@ -50,6 +50,10 @@ const markVerificationCodeUsed = async (id) => {
   await query('UPDATE email_verifications SET used = TRUE WHERE id = $1', [id]);
 };
 
+const deleteById = async (id) => {
+  await query('DELETE FROM users WHERE id = $1', [id]);
+};
+
 module.exports = {
   findByEmail,
   findById,
@@ -59,4 +63,5 @@ module.exports = {
   createVerificationCode,
   findVerificationCode,
   markVerificationCodeUsed,
+  deleteById,
 };

@@ -39,7 +39,7 @@ router.post('/', authenticate, requireVerified, async (req, res) => {
     // Notify teacher
     const teacher = await userRepo.findById(teacherUserId);
     if (teacher) {
-      emailService.sendRequestNotification(teacher.email, teacher.name, req.user.name, announcement.subject).catch(err =>
+      emailService.sendRequestNotification(teacher.email, teacher.name, req.user.name, announcement.subject, message).catch(err =>
         console.error('[POST /requests] Error enviando notificacion al profesor:', err)
       );
     }

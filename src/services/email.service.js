@@ -29,7 +29,7 @@ const sendVerificationEmail = async (email, name, code) => {
   });
 };
 
-const sendRequestNotification = async (teacherEmail, teacherName, studentName, subject) => {
+const sendRequestNotification = async (teacherEmail, teacherName, studentName, subject, message) => {
   await transporter.sendMail({
     from: process.env.SMTP_FROM,
     to: teacherEmail,
@@ -39,6 +39,12 @@ const sendRequestNotification = async (teacherEmail, teacherName, studentName, s
         <h1 style="color: #2563eb;">SuperProfe</h1>
         <h2>Hola ${teacherName}!</h2>
         <p>Tenés una nueva solicitud de chat de <strong>${studentName}</strong> para clases de <strong>${subject}</strong>.</p>
+        ${message ? `
+        <div style="background: #f3f4f6; border-radius: 8px; padding: 16px; margin: 16px 0; border-left: 4px solid #2563eb;">
+          <p style="margin: 0 0 6px 0; font-size: 12px; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.05em;">Mensaje del alumno</p>
+          <p style="margin: 0; color: #374151; font-style: italic;">"${message}"</p>
+        </div>
+        ` : ''}
         <p>Ingresá a tu panel para aceptar o rechazar la solicitud.</p>
         <a href="${process.env.CLIENT_URL}/dashboard" style="display: inline-block; background: #2563eb; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; margin-top: 16px;">
           Ver solicitud

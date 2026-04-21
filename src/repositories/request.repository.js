@@ -28,10 +28,12 @@ const findByTeacher = async (teacherId, status) => {
   let q = `
     SELECT cr.*,
       s.name AS student_name, s.avatar_url AS student_avatar,
-      a.title AS announcement_title, a.subject
+      a.title AS announcement_title, a.subject,
+      c.id AS chat_id
     FROM chat_requests cr
     JOIN users s ON s.id = cr.student_id
     LEFT JOIN announcements a ON a.id = cr.announcement_id
+    LEFT JOIN chats c ON c.request_id = cr.id
     WHERE cr.teacher_id = $1
   `;
   const params = [teacherId];
@@ -45,10 +47,12 @@ const findByStudent = async (studentId) => {
   const result = await query(`
     SELECT cr.*,
       t.name AS teacher_name, t.avatar_url AS teacher_avatar,
-      a.title AS announcement_title, a.subject
+      a.title AS announcement_title, a.subject,
+      c.id AS chat_id
     FROM chat_requests cr
     JOIN users t ON t.id = cr.teacher_id
     LEFT JOIN announcements a ON a.id = cr.announcement_id
+    LEFT JOIN chats c ON c.request_id = cr.id
     WHERE cr.student_id = $1
     ORDER BY cr.created_at DESC
   `, [studentId]);

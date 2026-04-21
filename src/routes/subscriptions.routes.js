@@ -54,7 +54,7 @@ router.get('/plans', (req, res) => {
 // GET /subscriptions/me
 router.get('/me', authenticate, async (req, res) => {
   try {
-    const sub = await subscriptionService.getMySubscription(req.user.id);
+    const sub = await subscriptionService.getMySubscription(req.user.id, req.user.role);
     res.json(sub);
   } catch (err) {
     console.error('[GET /subscriptions/me]', err);
