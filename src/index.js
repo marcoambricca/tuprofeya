@@ -51,6 +51,7 @@ app.use('/api/chats', require('./routes/chats.routes'));
 app.use('/api/reviews', require('./routes/reviews.routes'));
 app.use('/api/subscriptions', require('./routes/subscriptions.routes'));
 app.use('/api/uploads', require('./routes/uploads.routes'));
+app.use('/api/purchase', require('./routes/purchase.routes'));
 
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
 
